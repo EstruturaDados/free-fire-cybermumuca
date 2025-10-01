@@ -12,6 +12,12 @@ typedef struct {
     int quantidade;
 } Item;
 
+void inserirItem(Item mochila[], int* numItens);
+void removerItem(Item mochila[], int* numItens);
+void listarItens(const Item mochila[], int numItens);
+void buscarItemPorNome(const Item mochila[], int numItens);
+
+
 #define MAX_ITENS 10
 
 // Código da Ilha – Edição Free Fire
@@ -37,7 +43,7 @@ int main() {
     // A estrutura switch trata cada opção chamando a função correspondente.
     // A ordenação e busca binária exigem que os dados estejam bem organizados.
     do {
-        printf("======================================\n");
+        printf("\n======================================\n");
         printf("  MOCHILA DE SOBREVIVENCIA - CODIGO DA ILHA\n");
         printf("======================================\n");
         printf("Itens na mochila: %d/10\n\n", numItens);
@@ -45,6 +51,7 @@ int main() {
         printf("1. Adicionar Item (Loot)\n");
         printf("2. Remover Item\n");
         printf("3. Listar Itens na Mochila\n");
+        printf("4. Buscar Item por Nome\n");
         printf("0. Sair\n");
         printf("--------------------------------------\n");
         printf("Escolha uma opcao: ");
@@ -61,6 +68,9 @@ int main() {
                 break;
             case 3:
                 listarItens(mochila, numItens);
+                break;
+            case 4:
+                buscarItemPorNome(mochila, numItens);
                 break;
             case 0:
                 printf("Saindo do sistema. Até a próxima partida!\n");
@@ -147,7 +157,7 @@ void removerItem(Item mochila[], int *numItens) {
 
 // listarItens():
 // Exibe uma tabela formatada com todos os componentes presentes na mochila.
-void listarItens(Item mochila[], int numItens) {
+void listarItens(const Item mochila[], int numItens) {
     printf("\n--- ITENS NA MOCHILA (%d/10) ---\n", numItens);
 
     if (numItens == 0) {
@@ -155,12 +165,42 @@ void listarItens(Item mochila[], int numItens) {
         return;
     }
 
+    printf("\n-----------------------------------------------------\n");
     printf("%-20s | %-20s | %-10s\n", "Nome", "Tipo", "Quantidade");
     printf("-----------------------------------------------------\n");
     for (int i = 0; i < numItens; i++) {
         printf("%-20s | %-20s | %-10d\n", mochila[i].nome, mochila[i].tipo, mochila[i].quantidade);
     }
     printf("-----------------------------------------------------\n\n");
+
+    printf("Pressione Enter para continuar...");
+    while (getchar() != '\n'); // Limpa o buffer
+    getchar(); // Espera o Enter
+}
+
+
+void buscarItemPorNome(const Item mochila[], int numItens) {
+    printf("\n--- Buscar Item na Mochila ---\n");
+
+    char nomeBusca[30];
+    printf("Digite o nome do item que deseja buscar: ");
+    scanf("%s", nomeBusca);
+
+    bool encontrado = false;
+
+    for (int i = 0; i < numItens; i++) {
+        if (strcmp(mochila[i].nome, nomeBusca) == 0) {
+            encontrado = true;
+            printf("\n--- Item Encontrado! ---\n");
+            printf("Nome: %s\n", mochila[i].nome);
+            printf("Tipo: %s\n", mochila[i].tipo);
+            printf("Quantidade: %d\n", mochila[i].quantidade);
+            printf("-------------------------\n\n");
+            break;
+        }
+    }
+
+    if (!encontrado) printf("\nResultado: Item '%s' NAO foi encontrado na mochila.\n\n", nomeBusca);
 
     printf("Pressione Enter para continuar...");
     while (getchar() != '\n'); // Limpa o buffer
